@@ -32,4 +32,71 @@
     display: block;
 }
 
+/* APPARENCE DU SITE --------------------------------------------------------------------------------------------------------------------------- */
 
+/* Toute la page */
+body {
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+    background-image : url("../image/light.jpg");
+    background-size : cover;
+}
+
+/* Titre centré */
+.titre {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+/* Le sous-titre */
+header {text-align : center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color : rgb(20, 19, 20);
+    font-size : 20px;
+    text-shadow: -1px 0 white, 0 1px white,
+          1px 0 white, 0 -1px white}
+
+/* La navbar */
+.flex-container {
+    display: flex;
+    position : sticky;
+  }
+  .flex-container > div {
+    text-align: center ;
+    background-color: #1e0d2c;
+    margin: 0px;
+    margin-right : 0px;
+    padding: 14px;
+    font-size: 20px;
+    line-height: 25px;
+    width: 360px;
+  }
+
+  a {
+    text-decoration: none;
+    color : rgb(255, 255, 255);
+}
+
+/* Lumiere navbar */
+
+.flex-container > div:hover{
+    background-color: rgb(236, 213, 0);
+    color : black ;
+  }
+
+/* Texte dans la partie grise de la page */
+
+.texte {
+    float: center;
+    background-color: rgba(223, 219, 248, 0.7);
+    border: 2px solid black;
+    text-align: center;
+              }
+
+/* Le titre */
+
+h1 {
+    text-align: center;
+    color :rgb(202, 167, 11);
+}
