@@ -9,9 +9,12 @@ var half_cell = cell / 2;
 var player = 2;
 var color;
 
-function new_game(rows, columns){
-    // Ligne invisible qui permet de montrer où l'on va poser le pion
-    rows += 1;    
+var rows;
+var columns;
+
+function new_game(p_rows, p_columns){
+    rows = p_rows + 1; // Ligne invisible qui permet de montrer où l'on va poser le pion
+    columns = p_columns; 
     
     grid = [];
     for(var j = 0; j < columns; j++){
@@ -35,6 +38,8 @@ function new_game(rows, columns){
     }
 
     board_context.globalCompositeOperation = 'source-over';
+
+    board.addEventListener('click', mouse_click);
 }
 
 //Affichage emplacement pions
@@ -58,14 +63,14 @@ function get_mouse_position(event){
 // Fonction évenement clique de la souris
 function mouse_click(event){
     board_context.beginPath();
-    board_context.fillStyle = 'gray';
+    board_context.fillStyle = 'white';
     board_context.fillRect(0, 0, cell * columns, cell);
     board_context.stroke();
     var mouse_position = get_mouse_position(event);
 
     for (var j = 0; j < board.width; j += cell){
         if (mouse_position.x > j && mouse_position.x < j + cell){
-            if (grid[j / cell][0] != undefined) break;
+            if (grid[0][j / cell] != undefined) break;
             var top_y = column_fill(j / 100) + 1;
             player_change();
             fall_pawn(j + half_cell, half_cell, top_y * cell + half_cell);
@@ -81,7 +86,6 @@ function mouse_click(event){
     }
 }
 
-
 function column_fill(column){
     var row = rows - 2;
     while(row >= 0 && grid[row][column] != undefined){
@@ -92,6 +96,7 @@ function column_fill(column){
     return row;
 }
 
+// Changer de joueur
 function player_change(){
     if(player == 1){
         player = 2;
@@ -102,33 +107,31 @@ function player_change(){
     }
 }
 
-// Test si il y a un gagnant
-function check_winner(x, y){
-    return false;
-}
 
-
-//Animation de la chute du pion
+// Animation de la chute du pion
 function fall_pawn(x, y, max_y){
     game_context.clearRect(x - half_cell, 0, cell, max_y);
     game_context.beginPath();
-    game_context.arc(x, y , 35, Math.PI * 2);
+    game_context.arc(x, y , 35, 0, Math.PI * 2);
     game_context.strokeStyle = 'white';
     game_context.fillStyle = color;
     game_context.fill();
     game_context.stroke();
     if (y != max_y) {
         y += 10;
-        setTimeout(fall_pawn(x, y ,max_y), 1);
+        //setTimeout('fall_pawn(' + x + ',' + y + ', ' + max_y + ')', 1);
+        //setTimeout(() => {fall_pawn(x,y,max_y ); }, 1);
+        setTimeout(fall_pawn,1,x,y,max_y);
+
     }
     return;
 }
 
-//animation du pion avant la chute
+// Animation du pion avant la chute
 function place_pawn(event){
     color = (player == 1 ? 'red' : 'yellow');
     var mouse_position = get_mouse_position(event);
-    var x = mouse_position.x/cell;
+    var x = parseInt(mouse_position.x/cell);
 
     board_context.beginPath();
     board_context.fillStyle = 'white';
@@ -144,3 +147,14 @@ function place_pawn(event){
     board_context.stroke();
 }
 
+// Tester si il y a un gagnant
+function check_winner(i, j){
+
+}
+
+// Renvoie le nombre de pions consécutifs du même joueur
+function count_pawn(i, j, max_i, max_j, delta_i, delta_j, player){
+    if (i == max_i || j == max_j) return 0;
+    if (grid[i][j] != player) return 0;
+    return 1 + count_pawn(i + delta_i, j + delta_j, max_i, max_j, delta_i, delta_j, player);
+}
