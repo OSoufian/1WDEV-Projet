@@ -6,15 +6,24 @@ var grid;
 
 var cell = 100;
 var half_cell = cell / 2;
-var player = 2;
-var color;
+var player = 0;
+var color
 
 var rows;
 var columns;
+var end_game;
+
+class Position{
+    constructor(row, column){
+        this.row = row;
+        this.column = column;
+    }
+}
 
 function new_game(p_rows, p_columns){
     rows = p_rows + 1; // Ligne invisible qui permet de montrer où l'on va poser le pion
-    columns = p_columns; 
+    columns = p_columns;
+    end_game = rows * columns;
     
     grid = [];
     for(var j = 0; j < columns; j++){
@@ -53,7 +62,7 @@ function create_circle(x, y, radius){
 // Déterminer la position de la souris sur le board
 function get_mouse_position(event){
     var mouse_x = event.offsetX * board.width / board.clientWidth;
-    var mouse_y = event.offsetY * board.height / board.clientHeigh;
+    var mouse_y = event.offsetY * board.height / board.clientHeight;
     return{
         x: mouse_x,
         y: mouse_y 
@@ -62,6 +71,7 @@ function get_mouse_position(event){
 
 // Fonction évenement clique de la souris
 function mouse_click(event){
+    end_game -= 1;
     board_context.beginPath();
     board_context.fillStyle = 'white';
     board_context.fillRect(0, 0, cell * columns, cell);
@@ -71,22 +81,41 @@ function mouse_click(event){
     for (var j = 0; j < board.width; j += cell){
         if (mouse_position.x > j && mouse_position.x < j + cell){
             if (grid[0][j / cell] != undefined) break;
-            var top_y = column_fill(j / 100) + 1;
             player_change();
-            fall_pawn(j + half_cell, half_cell, top_y * cell + half_cell);
-            board.style.pointerEvents = 'none';
-            if (!check_winner(j / 100, top_y - 1)){
-                setTimeout(function(){
-                    board.style.pointerEvents = 'auto';
-                }, 500);
-            } else {
+            var top_y = add_pawn(j / cell) + 1;  
+            enable_board_click(false);          
+            fall_pawn(j + half_cell, half_cell, top_y * cell + half_cell);           
 
+            switch (check_state()){
+                case 0:
+                    enable_board_click(true);
+                    break;
+                case 1:
+                case 2:
+                    show_winner_pawns();                   
+                    break;
+                case 3:
+                    alert("Et c'est une égalité !");
+                    break;
             }
         }
     }
 }
 
-function column_fill(column){
+function enable_board_click(enabled){
+    if (enabled){
+        setTimeout(function(){
+            board.style.pointerEvents = 'auto';
+        }, 500);
+    }
+    else{
+        board.style.pointerEvents = 'none';
+    }
+}
+
+
+// Ajout d'un nouveau pion dans la colonne
+function add_pawn(column){
     var row = rows - 2;
     while(row >= 0 && grid[row][column] != undefined){
         row -= 1;
@@ -98,13 +127,16 @@ function column_fill(column){
 
 // Changer de joueur
 function player_change(){
-    if(player == 1){
-        player = 2;
-        color = 'red';
-    }else{
-        player = 1;
-        color = 'yellow';
-    }
+   switch(player){
+        case 0:
+        case 2:
+            player=1;
+            color='yellow';
+            break;
+        case 1:
+            player=2;
+            color='red';
+    }   
 }
 
 
@@ -148,13 +180,59 @@ function place_pawn(event){
 }
 
 // Tester si il y a un gagnant
-function check_winner(i, j){
-
+function check_state(){
+    if (end_game == 0) return 3;
+    if (check_rows() || check_columns()) return player;
+    return 0;
 }
 
+var count = 0;
+var positions = [];
+
 // Renvoie le nombre de pions consécutifs du même joueur
-function count_pawn(i, j, max_i, max_j, delta_i, delta_j, player){
-    if (i == max_i || j == max_j) return 0;
-    if (grid[i][j] != player) return 0;
-    return 1 + count_pawn(i + delta_i, j + delta_j, max_i, max_j, delta_i, delta_j, player);
+function count_pawns(i, j, delta_i, delta_j){
+    if (i < 1 || i >= rows || j < 0 || j >= columns) return;
+    if (grid[i][j] == player){
+        positions.push(new Position(i, j));
+        count += 1;
+        if (count == 4) return;
+    }
+    else{
+        count = 0;
+        positions.length = 0;
+    }
+    count_pawns(i + delta_i, j + delta_j, delta_i, delta_j);
+}
+
+function check_rows(){
+    for (let i = 1; i < rows - 1; i++){
+        count = 0;
+        positions.length = 0;
+        count_pawns(i, 0, 0, 1);
+        if (count == 4) return true;
+    }
+    return false;
+}
+
+function check_columns(){
+    for (let j = 0; j < columns - 1; i++){
+        count = 0;
+        positions.length = 0;
+        count_pawns(rows - 1, j, -1, 0);
+        if (count == 4) return true;
+        return false;
+    }
+}
+
+function show_winner_pawns(){
+    positions.forEach(function(p){
+        board_context.beginPath();
+        board_context.arc(p.i*cell + half_cell, p.j*cell + half_cell, 35, 0, Math.PI * 2, true);
+        board_context.lineWidth = 5;
+        board_context.strokeStyle = 'green';
+        board_context.fillStyle = color;
+        board_context.fill();
+        board_context.stroke();
+        board_context.closePath();
+    });
 }
