@@ -14,13 +14,15 @@ var columns;
 var selected_column;
 var end_game;
 var positions;
+var drop_in_progress;
 
 var color_player_1 = 'yellow';
 var color_player_2 = 'red';
 var color_board = 'LightSkyBlue';
 
-
-
+var turn = 0;
+var score_player_1 = 0;
+var score_player_2 = 0;
 
 class Position{
     constructor(row, column){
@@ -50,10 +52,10 @@ function new_game(p_rows, p_columns){
     positions= [];
     
     grid = new Array();
-    for(var row = 0; row < rows; row +=1){
+    for(let row = 0; row < rows; row +=1){
         grid[row] = new Array(columns).fill(0);
     }
-
+   
     board.height = cell * rows;
     board.width = cell * columns;
     game.height = cell * rows;
@@ -62,7 +64,7 @@ function new_game(p_rows, p_columns){
     //Affichage du plateau
     board_context.fillStyle = color_board ;
     board_context.fillRect(0, cell, board.width, board.height);
-    board_context.stroke();
+    board_context.fill();
     
     for (let row = 1; row <= rows ; row += 1){
         for (let column = 0; column <= columns ; column += 1){
@@ -72,8 +74,9 @@ function new_game(p_rows, p_columns){
     }
 
     board_context.globalCompositeOperation = 'source-over';
-    board.addEventListener('click', mouse_click);
-    enable_board_click(true);
+    board.addEventListener('click', on_mouse_click);
+    board.addEventListener('mousemove', on_mouse_move);
+    document.addEventListener('keydown', on_key_down);
 }
 
 
@@ -97,54 +100,46 @@ function get_mouse_position(event){
 }
 
 // Fonction évenement clique de la souris
-function mouse_click(event){
-    board_context.beginPath();
-    board_context.fillStyle = 'white';
-    board_context.fillRect(0, 0, cell * columns, cell);
-    board_context.stroke();
-    mouse_position = get_mouse_position(event);
+function on_mouse_click(event){
+       //mouse_position = get_mouse_position(event);
     drop_pawn();
 }
 
 function drop_pawn(){
+    board_context.beginPath();
+    board_context.fillStyle = 'white';
+    board_context.fillRect(0, 0, cell * columns, cell);
+    board_context.stroke();
+
+    if(drop_in_progress) return;
     end_game = true;
     if (grid[1][selected_column] == 0){
-    end_game = false;
-    var top_cell = add_pawn(selected_column);   
-    enable_board_click(false);          
-    fall_pawn(selected_column * cell + half_cell, half_cell, top_cell * cell + half_cell);
-    }
+        end_game = false;
+        var top_cell = add_pawn(selected_column);   
+        animate_drop_pawn(selected_column * cell + half_cell, half_cell, top_cell * cell + half_cell);
+    }   
 }
 
-document.addEventListener('keydown', function(event){
+function on_key_down(event)
+{
     switch(event.code){
         case "ArrowLeft":
-            selected_column--;
+            selected_column -= 1;
             if(selected_column < 1) selected_column = 0;
+            if(drop_in_progress) return;
             place_pawn();
             break;
         case "ArrowRight":
-            selected_column++;
+            selected_column += 1;
             if(selected_column >= columns) selected_column = columns - 1;
+            if(drop_in_progress) return;
             place_pawn();
             break;
-        case "Enter":
-            drop_pawn();
+        case "ArrowDown":
+            drop_pawn();             
             break;            
     }
-})
 
-
-
-function enable_board_click(enabled){
-    if (enabled){
-        setTimeout(function(){
-            board.style.pointerEvents = 'auto';
-        }, 500);
-    }
-    else{
-        board.style.pointerEvents = 'none';
-    }
 }
 
 // Ajout d'un nouveau pion dans la colonne
@@ -159,8 +154,10 @@ function add_pawn(column){
 }
 
 // Changer de joueur
-function player_change(){
-   if(player == 1){  
+//todo player_change to change_player 
+function change_player(){
+    turn += 1;
+    if(player == 1){  
         player=2;
         color=color_player_2;
     }else{        
@@ -170,7 +167,8 @@ function player_change(){
 }
 
 // Animation de la chute du pion
-function fall_pawn(x, y, max_y){
+function animate_drop_pawn(x, y, max_y){
+    drop_in_progress = true;
     game_context.clearRect(x - half_cell, 0, cell, max_y);
     game_context.beginPath();
     game_context.arc(x, y , 35, 0, Math.PI * 2);
@@ -179,30 +177,15 @@ function fall_pawn(x, y, max_y){
     game_context.stroke();
     
     if (y < max_y) {
-        y += 100;
+        y += 5;
         //setTimeout('fall_pawn(' + x + ',' + y + ', ' + max_y + ')', 1);
         //setTimeout(() => {fall_pawn(x,y,max_y ); }, 1);
-        setTimeout(fall_pawn,1,x,y,max_y);
+        setTimeout(animate_drop_pawn,5,x,y,max_y);
     } 
-    else
+    else 
     {
-        switch (check_state()){
-            case 0:
-                enable_board_click(true);
-                player_change();           
-                break;
-            case 1:
-            case 2:
-                clearInterval(timer_id);
-                show_winner_pawns();
-                setTimeout(() => {message_winner(true);}, 1000); 
-                break;
-            case 3:
-                clearInterval(timer_id)
-                setTimeout(() => {message_winner(false);}, 1000); 
-                break;
-        }
-       
+        check_state();      
+        drop_in_progress = false;
     }
 }
 
@@ -215,8 +198,8 @@ function message_winner(win){
 // Affichage du pion avant la chute
 function on_mouse_move(event){
     var mouse_position = get_mouse_position(event);  
-    //color = (player == 1 ? 'yellow' : 'red');   
     selected_column = parseInt(mouse_position.x/cell);
+    if(drop_in_progress) return;
     place_pawn();
 }
 
@@ -237,9 +220,32 @@ function place_pawn(){
 
 // Tester si il y a un gagnant
 function check_state(){
-    if (end_game == true) return 3;
-    if (check_rows() || check_columns() || check_diagonal_ne() || check_diagonal_nw()) return player;
-    return 0;
+    var state = 0;
+    if (end_game == true) state = 3;
+    else if (check_rows() || check_columns() || check_diagonal_ne() || check_diagonal_nw()) state = player;
+    refresh_ui(state);
+}
+
+
+function refresh_ui(state){
+    switch (state){
+        case 0:
+            change_player();   
+            place_pawn();       
+            break;
+        case 1:
+        case 2:
+            update_player_score(true);
+            clearInterval(timer_id);
+            show_winner_pawns();
+            setTimeout(() => {message_winner(true);}, 1000); 
+            break;
+        case 3:
+            update_player_score(false);
+            clearInterval(timer_id)
+            setTimeout(() => {message_winner(false);}, 1000); 
+            break;
+    }
 }
 
 
@@ -318,9 +324,25 @@ function show_winner_pawns(){
     
 }
 
-// Savoir durée temps de partie
-
+//Chronomètrage de la partie
 function timer_click(){
     var elapsed = Date.now() - timer_time;
-    // new Date(elapsed).toISOString().slice(11, -5)
+    //todo Date(elapsed).toISOString().slice(11, -5)
+}
+
+
+
+function update_player_score(winner){
+    if(winner){
+        var score = 100 + columns * rows - turn ;
+        if(player == 1) score_player_1 += score;
+        else score_player_2 += score;       
+    }
+    else
+    {
+        score_player_1 += 50;
+        score_player_2 += 50;  
+    }
+    //todo integration
+    //Affichage des scores
 }
