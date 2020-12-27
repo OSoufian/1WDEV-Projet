@@ -4,13 +4,49 @@
     <meta charset="UTF-8">
     <title>Puissance 4</title>
     <link rel="stylesheet" href="puissance4.css">
+    <script src="puissance4.js"></script>
 </head>
 <body>
-    <button onclick="new_game(6, 7)">New Game</button>
+    <body>
+
+        <!-- Le titre -->
+            <div>
+               <h1>PUISSANCE 4</h1>
+            </div>
+        
+        <!-- Le sous-titre -->
+            <header>
+        Enchainez les 4 a la suite !
+            </header>
+        
+        <!-- Barre de navigation -->
+            <div>
+            <nav class="flex-container">
+                <div><a href="./debut.html">Accueil</a></div>
+                <div><a href="./puissance4.html">Le jeu</a> </div>
+                <div><a href="./regles.html">Les regles</a></div>  
+            </nav>
+            </div>
+    
+    <!-- Les affichages de pion/Temps/score -->
+    <div class="textetrois">
+    <p> Joueur 1 : <div id ="pion"></div> </p>
+    <p>Joueur 2 : <div id ="piondeux"></div></p>
+    <div id=time> Temps :</div>
+    <div id=score> Score :</div>
+    </div>
+    
+    <!-- La grille -->
+    <button onclick="new_game(6, 7)" class="bouton">Classique</button>
+    <button onclick="new_game(5, 6)" class="bouton">Mini Grille</button>
+    <button onclick="new_game(7, 8)" class="bouton">Maxi Grille</button>
     <div id="div">
         <canvas id="game"></canvas>
         <canvas id="board" onmousemove="place_pawn(event)"></canvas>
     </div>
-    <script src="puissance4.js"></script>
+
+    
+
+
 </body>
 </html>
