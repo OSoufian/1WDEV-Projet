@@ -83,7 +83,7 @@ function new_game(p_rows, p_columns){
 //Affichage emplacement pions
 function show_circle(x, y , fill){
     board_context.globalCompositeOperation = 'destination-out';
-    board_context.arc(x, y, 35, 0, Math.PI * 2, true);
+    board_context.arc(x, y, 30, 0, Math.PI * 2, true);
     board_context.fillStyle = fill;
     board_context.fill();
     board_context.closePath();
@@ -171,7 +171,7 @@ function animate_drop_pawn(x, y, max_y){
     drop_in_progress = true;
     game_context.clearRect(x - half_cell, 0, cell, max_y);
     game_context.beginPath();
-    game_context.arc(x, y , 35, 0, Math.PI * 2);
+    game_context.arc(x, y , 30, 0, Math.PI * 2);
     game_context.fillStyle = color;
     game_context.fill();
     game_context.stroke();
@@ -211,7 +211,7 @@ function place_pawn(){
 
     board_context.beginPath();
     board_context.strokeStyle = 'white';
-    board_context.arc(selected_column * cell + half_cell, half_cell, 35, 0, Math.PI * 2, true);
+    board_context.arc(selected_column * cell + half_cell, half_cell, 30, 0, Math.PI * 2, true);
     board_context.fillStyle = color;
     board_context.lineWidth = 0;
     board_context.fill();
