@@ -60,17 +60,17 @@ header {text-align : center;
 /* La navbar */
 .flex-container {
     display: flex;
-    position : sticky;
   }
   .flex-container > div {
     text-align: center ;
-    background-color: #1e0d2c;
+    background-color: #2f00ff;
     margin: 0px;
     margin-right : 0px;
     padding: 14px;
     font-size: 20px;
     line-height: 25px;
-    width: 360px;
+    width: 420px;
+    
   }
 
   a {
@@ -99,4 +99,84 @@ header {text-align : center;
 h1 {
     text-align: center;
     color :rgb(202, 167, 11);
+    font-size: 5em ;
+    text-shadow: -2px 0 white, 0 2px white,
+    2px 0 white, 0 2px white
+}
+
+/* Le footer */
+footer {text-align : center;
+  background-color: white;
+  font-size :10px}
+
+/* Regles dans la partie grise de la page regles.html */
+
+.textedeux {
+  float: center;
+  background-color: rgba(223, 219, 248, 0.7);
+  border: 2px solid black;
+  text-align: center;
+            }
+
+
+/* Image Puissance 4 dans regles.html */
+#imagerie {
+  float: left;
+}
+
+/* Image regles dans regles.html */
+#imagerie2 {
+  float: center;
+  background-color: rgba(223, 219, 248, 0.7);
+  border: 2px solid black;
+  text-align: center;
+}
+
+
+/* Faire en sorte que la grille soit superposée au jeu */
+ /* #board { */ 
+  /*position: relative;
+  z-index: 1;
+}
+
+#game {
+  position : absolute;
+}*/
+
+/*Affichage joueur 1 : jaune, joueur 2 : rouge a coté de la grille */
+#pion {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    background: yellow;
+}
+
+#piondeux {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: red;
+}
+
+/*Texte dans puissance4.html*/
+.textetrois {
+  float: center;
+  background-color: rgba(223, 219, 248, 0.7);
+  border: 2px solid black;
+  text-align: center;
+  position: relative;
+  float: right;
+  margin-right : 500px
+            }
+
+/*Les boutons pour choisir la grille */
+.bouton {
+  text-align: center ;
+    background:linear-gradient(#2f00ff, #2f00ff6c);
+    margin: 0px;
+    margin-right : 0px;
+    padding: 14px;
+    font-size: 20px;
+    line-height: 17px;
+    width: 140px;
 }
