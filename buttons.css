@@ -1,0 +1,61 @@
+/* Style des buttons du menu principal*/
+.menu-buttons button {
+    background-color: #4CAF50;
+    border: 1px solid green;
+    color: white; 
+    padding: 10px 24px; 
+    cursor: hand;; 
+    float: left;
+    font-size: 20px;
+  }
+  
+  .menu-buttons button:not(:last-child) {
+    border-right: none; /* Afin d'éviter les doubles bordures */
+  }
+  
+  
+  .menu-buttons:after {
+    content: "";
+    clear: both;
+    display: table;
+  }  
+  
+  .menu-buttons button:hover {
+    background-color: #3e8e41;
+  }
+
+
+  /* style des buttons qui lance une partie */
+  .game-buttons {
+    background-color: #4CAF50; 
+    border: 1px solid green; 
+    color: white; 
+    padding: 10px 24px;
+    cursor: pointer; 
+    width: 50%;
+    display: block; 
+  }
+  
+  .game-buttons button:not(:last-child) {
+    border-bottom: none; /* Afin d'éviter les doubles bordures */
+  }
+  
+  
+  .game-buttons button:hover {
+    background-color: #3e8e41;
+  }
+
+  .box {
+    display: flex;
+    flex-direction:column;
+    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
+  }
+   
+
+
+  
+
+
+  
