@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Puissance 4</title>
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/puissance4.css">
+    <script src="puissance4.js"></script>
+    
+</head>
+<body  onload="load_game()">
+
+    <!-- Le titre -->
+    <div>
+        <img class="logo"  src="images/logo.png">
+    </div>
+    
+    <!-- Le sous titre -->
+    <header>
+        Enchaînez les 4 à la suite !
+    </header>
+
+    <div class="menu-buttons" style="width:100%">
+    <button style="width:33.3%" onclick="location.href='home.html'">Accueil</button>
+    <button style="width:33.3%" onclick="location.href='choice.html'">Jeu</button>
+    <button style="width:33.3%" onclick="location.href='rules.html'">Règles</button>
+    </div>
+
+    <div class="grid-canvas-container">
+        <div class="grid-canvas">
+            <canvas id="game"></canvas>
+            <canvas id="board" onmousemove="place_pawn(event)"></canvas>       
+        </div>
+
+        <div style="grid-column:3;grid-row:1;">
+            <p style="font-size: 30px">
+            <img style="vertical-align:middle"  src="images/pawn1.png" alt="pawn1">
+            <b>Joueur 1 : <span id="player1-score"></span></b></p>      
+            <p style="font-size: 30px">
+            <img style="vertical-align:middle"  src="images/pawn2.png" alt="pawn2">
+            <b>Joueur 2 : <span id="player2-score"></span></b>
+            </p>
+        </div>
+
+        <div style="grid-column:3;grid-row:3">
+            <p style="font-size: 30px">
+                <img style="vertical-align:middle;width: 8%;"  src="images/timer.gif" alt="timer">
+            <b><span id="timer"></span></b>
+            </p>
+        </div>
+
+    </div>
+
+    <footer> Site pour le Projet 1WDEV de Soufian OUALLA et Lucas THOMAS © SUPINFO International University 2020 </footer>
+   </body>
+   </html>
+
+    
