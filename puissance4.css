@@ -1,43 +1,9 @@
-*{
-    padding: 0px;
-    margin: 0px;
-}
-
-#div{
-    text-align: center;
-    position: absolute;
-    top: 50vh;
-    left: 50vw;
-    transform: translate(-50%, -50%);
-}
-
-#board{
-    position: absolute;
-    width: 75vw;
-    height: 75vw;
-    max-width: 30em;
-    max-height: 30em;    
-    display: block;
-    cursor: pointer;
-    background: transparent;
-    transform: translateY(-100%);
-}
-
-#game{
-    position: relative;
-    width: 75vw;
-    height: 75vw;
-    max-width: 30em;
-    max-height: 30em;    
-    display: block;
-}
-
 /* APPARENCE DU SITE --------------------------------------------------------------------------------------------------------------------------- */
 
 /* Toute la page */
 body {
     font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-    background-image : url("../image/light.jpg");
+    background-image : url("../images/light.jpg");
     background-size : cover;
 }
 
@@ -57,33 +23,6 @@ header {text-align : center;
     text-shadow: -1px 0 white, 0 1px white,
           1px 0 white, 0 -1px white}
 
-/* La navbar */
-.flex-container {
-    display: flex;
-  }
-  .flex-container > div {
-    text-align: center ;
-    background-color: #2f00ff;
-    margin: 0px;
-    margin-right : 0px;
-    padding: 14px;
-    font-size: 20px;
-    line-height: 25px;
-    width: 420px;
-    
-  }
-
-  a {
-    text-decoration: none;
-    color : rgb(255, 255, 255);
-}
-
-/* Lumiere navbar */
-
-.flex-container > div:hover{
-    background-color: rgb(236, 213, 0);
-    color : black ;
-  }
 
 /* Texte dans la partie grise de la page */
 
@@ -92,31 +31,13 @@ header {text-align : center;
     background-color: rgba(223, 219, 248, 0.7);
     border: 2px solid black;
     text-align: center;
-              }
-
-/* Le titre */
-
-h1 {
-    text-align: center;
-    color :rgb(202, 167, 11);
-    font-size: 5em ;
-    text-shadow: -2px 0 white, 0 2px white,
-    2px 0 white, 0 2px white
 }
 
 /* Le footer */
 footer {text-align : center;
   background-color: white;
-  font-size :10px}
-
-/* Regles dans la partie grise de la page regles.html */
-
-.textedeux {
-  float: center;
-  background-color: rgba(223, 219, 248, 0.7);
-  border: 2px solid black;
-  text-align: center;
-            }
+  font-size :10px;
+  width: 100%}
 
 
 /* Image Puissance 4 dans regles.html */
@@ -125,8 +46,9 @@ footer {text-align : center;
 }
 
 /* Image regles dans regles.html */
-#imagerie2 {
+#game-image {
   float: center;
+  width: 50%;
   background-color: rgba(223, 219, 248, 0.7);
   border: 2px solid black;
   text-align: center;
@@ -134,14 +56,17 @@ footer {text-align : center;
 
 
 /* Faire en sorte que la grille soit superposée au jeu */
- /* #board { */ 
-  /*position: relative;
+#board { 
+  position: relative;
   z-index: 1;
+  border: 2px solid black;
 }
 
 #game {
   position : absolute;
-}*/
+  float : center;
+  border: 2px solid black;
+}
 
 /*Affichage joueur 1 : jaune, joueur 2 : rouge a coté de la grille */
 #pion {
@@ -158,25 +83,68 @@ footer {text-align : center;
   background: red;
 }
 
-/*Texte dans puissance4.html*/
-.textetrois {
+/*Texte dans les pages avec les grilles*/
+#textetrois {
   float: center;
   background-color: rgba(223, 219, 248, 0.7);
   border: 2px solid black;
   text-align: center;
   position: relative;
   float: right;
-  margin-right : 500px
-            }
+  margin-right : 200px;
+  display : none
+}
 
 /*Les boutons pour choisir la grille */
-.bouton {
+
+.choix {
   text-align: center ;
     background:linear-gradient(#2f00ff, #2f00ff6c);
-    margin: 0px;
-    margin-right : 0px;
     padding: 14px;
     font-size: 20px;
     line-height: 17px;
-    width: 140px;
+    width: 250px;
+    margin : 20px;
+    margin-left : auto;
+  
+  }
+
+.choix a {
+  text-decoration: none;
+  color : rgb(255, 255, 255);
+}
+
+/*Le logo en haut de la page */
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 20%;
+}
+
+/* L'affichage des regles */
+.grid-rules {
+  display: grid;
+  width: 75%;
+  grid-template-columns: auto auto ;
+  padding: 20px;
+}
+
+.grid-image-rules { 
+  grid-row-start: 1;
+  grid-row-end: 5;
+}
+
+
+/* Le canvas de jeu */
+.grid-canvas-container {
+  display: grid;
+  grid-template-columns: 100 auto auto;
+  padding: 10px;
+}
+
+.grid-canvas {
+  grid-column: 2;
+  grid-row-start: 1;
+  grid-row-end: 4;
 }
